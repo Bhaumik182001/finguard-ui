@@ -1,20 +1,29 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { Toaster } from "@/components/ui/sonner"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner";
+import LoginPage from "@/pages/auth/LoginPage";
+
+// A simple placeholder for the dashboard until we build Milestone 2
+const DashboardPlaceholder = () => (
+  <div className="min-h-screen flex items-center justify-center bg-slate-50">
+    <h1 className="text-2xl font-semibold text-slate-800">Dashboard (Protected Route)</h1>
+  </div>
+);
 
 function App() {
   return (
     <BrowserRouter>
-      <main className="min-h-screen bg-background text-foreground">
-        <Routes>
-          <Route path="/login" element={<div>Login Page</div>} />
-          <Route path="/dashboard" element={<div>Dashboard</div>} />
-        </Routes>
-      </main>
+      <Routes>
+        {/* Redirect root to login */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/dashboard" element={<DashboardPlaceholder />} />
+      </Routes>
       
-      {/* Global Toaster Mount */}
+      {/* Global Error/Success Toasts */}
       <Toaster richColors position="top-right" />
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

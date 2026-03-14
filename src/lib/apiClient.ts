@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8080', // Ensure this matches your Spring Boot port
+  baseURL: 'http://localhost:8080', // Matches your Spring Boot port
   headers: {
     'Content-Type': 'application/json',
   },
@@ -23,15 +23,14 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Handle specific Spring Boot Exceptions
     if (error.response?.status === 401) {
-      toast.error('Authentication Required. Please login.');
+      toast.error('Authentication Required', { description: 'Please login to continue.' });
     } else if (error.response?.status === 403) {
       const message = error.response?.data?.message || 'Access Denied.';
-      toast.error(message);
+      toast.error('Access Denied', { description: message });
     } else if (error.response?.status === 400 || error.response?.status === 422) {
       const message = error.response?.data?.message || 'Transaction Failed.';
-      toast.error(message);
+      toast.error('Error', { description: message });
     }
 
     return Promise.reject(error);
