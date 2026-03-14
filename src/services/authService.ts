@@ -5,14 +5,19 @@ export interface LoginRequest {
   password: string;
 }
 
+// Added the exact DTO from the Spring Boot contract
+export interface AuthResponse {
+  token: string;
+  message: string;
+}
+
 export const authService = {
-  login: async (data: LoginRequest) => {
-    const response = await apiClient.post('/api/v1/auth/login', data);
+  login: async (data: LoginRequest): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>('/api/v1/auth/login', data);
     
-    // Assuming your Spring Boot backend returns { token: "..." }
-    const token = response.data.token;
-    if (token) {
-      localStorage.setItem('finguard_token', token);
+    // We perfectly match the "token" key from the backend
+    if (response.data.token) {
+      localStorage.setItem('finguard_token', response.data.token);
     }
     
     return response.data;
