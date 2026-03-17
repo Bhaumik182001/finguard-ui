@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { Building, Loader2 } from "lucide-react";
+import { Building, Loader2, Check, X } from "lucide-react";
 
 import { authService } from "@/services/authService";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -18,7 +18,12 @@ const registerSchema = z.object({
   firstName: z.string().min(2, "First name is required"),
   lastName: z.string().min(2, "Last name is required"),
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
   confirmPassword: z.string()
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
@@ -40,6 +45,8 @@ export default function RegisterPage() {
       confirmPassword: "",
     },
   });
+
+  const passwordValue = form.watch("password") || "";
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     setIsLoading(true);
@@ -73,10 +80,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md border-slate-200 shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md border-slate-200 shadow-lg rounded-none">
         <CardHeader className="space-y-1 flex flex-col items-center">
-          <div className="w-12 h-12 bg-blue-900 rounded-lg flex items-center justify-center mb-4">
+          <div className="w-12 h-12 bg-blue-900 rounded-none flex items-center justify-center mb-4">
             <Building className="text-white h-6 w-6" />
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight text-slate-900">Create an Account</CardTitle>
@@ -137,6 +144,28 @@ export default function RegisterPage() {
                     <FormControl>
                       <Input type="password" placeholder="••••••••" {...field} disabled={isLoading} />
                     </FormControl>
+                    <div className="mt-2 text-sm text-slate-500 flex flex-col gap-1">
+                      <div className="flex items-center gap-2">
+                        {passwordValue.length >= 8 ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-slate-400" />}
+                        <span className={passwordValue.length >= 8 ? "text-green-700 font-medium" : ""}>At least 8 characters</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {/[A-Z]/.test(passwordValue) ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-slate-400" />}
+                        <span className={/[A-Z]/.test(passwordValue) ? "text-green-700 font-medium" : ""}>At least one uppercase letter</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {/[a-z]/.test(passwordValue) ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-slate-400" />}
+                        <span className={/[a-z]/.test(passwordValue) ? "text-green-700 font-medium" : ""}>At least one lowercase letter</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {/[0-9]/.test(passwordValue) ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-slate-400" />}
+                        <span className={/[0-9]/.test(passwordValue) ? "text-green-700 font-medium" : ""}>At least one number</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {/[^A-Za-z0-9]/.test(passwordValue) ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-slate-400" />}
+                        <span className={/[^A-Za-z0-9]/.test(passwordValue) ? "text-green-700 font-medium" : ""}>At least one special character</span>
+                      </div>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}

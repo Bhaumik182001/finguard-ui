@@ -62,12 +62,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <Card className="w-full max-w-md border-slate-200 shadow-sm">
+    <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+      <Card className="w-full max-w-md border-slate-200 shadow-sm rounded-none">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
-            {/* Placeholder for FinGuard Logo */}
-            <div className="h-10 w-10 bg-blue-900 rounded-md flex items-center justify-center">
+            <div className="h-10 w-10 bg-blue-900 rounded-none flex items-center justify-center">
               <span className="text-white font-bold text-xl">F</span>
             </div>
           </div>
@@ -91,7 +90,7 @@ export default function LoginPage() {
                       <Input 
                         placeholder="name@example.com" 
                         {...field} 
-                        className="border-slate-300 focus-visible:ring-blue-900" 
+                        className="border-slate-300 focus-visible:ring-blue-900 rounded-none" 
                         disabled={isLoading} 
                       />
                     </FormControl>
@@ -110,7 +109,7 @@ export default function LoginPage() {
                         type="password" 
                         placeholder="••••••••" 
                         {...field} 
-                        className="border-slate-300 focus-visible:ring-blue-900" 
+                        className="border-slate-300 focus-visible:ring-blue-900 rounded-none" 
                         disabled={isLoading} 
                       />
                     </FormControl>
@@ -118,7 +117,7 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full bg-blue-900 hover:bg-blue-800 text-white" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-[#0a1930] hover:bg-[#112240] text-white rounded-none" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign In
               </Button>
