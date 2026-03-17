@@ -1,18 +1,29 @@
-export interface TransactionResponse {
-  transactionReference: string;
-  sourceAccountNumber: string;
-  destinationAccountNumber: string;
+export interface Transaction {
+  id: string;             // UUID or Reference ID
   amount: number;
-  currency: string;
-  status: 'PENDING' | 'COMPLETED' | 'FAILED';
-  transactionType: 'TRANSFER' | 'DEPOSIT' | 'WITHDRAWAL';
-  createdAt: string;
+  type: 'TRANSFER' | 'DEPOSIT' | 'WITHDRAWAL'; // Changed from transactionType
+  createdAt: string;      // The backend confirmed "timestamp" in the error JSON
+  status: 'SUCCESS' | 'FAILED' | 'PENDING' | 'COMPLETED';
+  description: string;
+  sourceAccountId: string;      // New key
+  destinationAccountId: string; // New key
+}
+
+
+export interface PaginatedTransactions {
+  content: Transaction[];
+  totalPages: number;
+  totalElements: number;
+  number: number; // Current page index
+  last: boolean;
+  first: boolean;
 }
 
 export interface TransactionRequest {
-  sourceAccountNumber: string;
-  destinationAccountNumber: string;
+  sourceAccountId: string;      // Changed from sourceAccountNumber
+  destinationAccountId: string; // Changed from destinationAccountNumber
   amount: number;
   currency: string;
-  transactionType: 'TRANSFER';
+  type: 'TRANSFER' | 'DEPOSIT' | 'WITHDRAWAL'; // Changed from transactionType
+  description: string;
 }

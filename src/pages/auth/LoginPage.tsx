@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -14,9 +14,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
 
 // Strict validation schema
 const formSchema = z.object({
@@ -27,6 +28,7 @@ const formSchema = z.object({
 export default function LoginPage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { setUser } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,10 +41,19 @@ export default function LoginPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await authService.login(values);
-      toast.success("Login successful");
-      navigate("/dashboard");
-    } catch (error) {
+       await authService.login(values);
+        // Tell our global state the user is valid so ProtectedRoute lets us in
+        setUser({ 
+          id: 1, 
+          first_name: "Test", 
+          last_name: "User", 
+          email: values.email, 
+          role: "USER" 
+        });
+
+        toast.success("Login successful");
+        navigate("/dashboard");
+    } catch (error) {  
       // apiClient already handles the toast.error, we just catch to prevent crashes
       console.error("Login attempt failed", error);
     } finally {
@@ -114,6 +125,14 @@ export default function LoginPage() {
             </form>
           </Form>
         </CardContent>
+        <CardFooter className="flex justify-center border-t border-slate-100 pt-6">
+          <p className="text-sm text-slate-600">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-blue-900 font-semibold hover:underline">
+              Sign up
+            </Link>
+          </p>
+        </CardFooter>
       </Card>
     </div>
   );

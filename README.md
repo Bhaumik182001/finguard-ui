@@ -1,73 +1,42 @@
-# React + TypeScript + Vite
+# FinGuard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An enterprise-grade banking interface built to facilitate secure, ACID-compliant financial transactions. FinGuard serves as the frontend client for a highly scalable Spring Boot microservices architecture, featuring stateless authentication, real-time ledger updates, and rigorous client-side validation.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Frontend Architecture:**
 
-## React Compiler
+- **Framework:** React 18 + Vite + TypeScript
+- **State Management:** Zustand (Global Auth State)
+- **Routing:** React Router v6 (Protected Routes)
+- **Data Fetching:** Axios (with custom Request/Response Interceptors)
+- **Form Handling:** React Hook Form + Zod (Strict Schema Validation)
+- **UI/Styling:** Tailwind CSS + Shadcn UI + Lucide Icons
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Backend Integration:**
 
-## Expanding the ESLint configuration
+- Designed to interface with a **Spring Boot 3** / **Java 17+** REST API.
+- Fully compatible with **PostgreSQL** deployed via **Docker**.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Key Engineering Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Stateless Security (JWT):** Implements `Bearer` token authentication. Global Axios interceptors automatically attach tokens to outbound requests and catch `401 Unauthorized` responses to securely terminate expired sessions.
+- **Contract-First Typings:** 100% strict TypeScript interfaces mapped exactly to backend DTOs to ensure type safety across the network boundary.
+- **Atomic Transaction UI:** Transfer forms include client-side validation to prevent malformed requests before they hit the ACID-compliant backend engine. Business logic exceptions (e.g., "Insufficient Funds") are elegantly intercepted and surfaced via UI toasts.
+- **Auto-Provisioning Support:** Designed to handle seamless onboarding where backend triggers initialize checking/savings ledgers upon registration.
+- **Paginated Audit Trail:** Transaction history leverages Spring Data Pagination, mapping a complex `Page` object into a highly readable, color-coded enterprise data table.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Local Setup & Execution
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Prerequisites
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Node.js (v18+)
+- The FinGuard Spring Boot Backend running on `localhost:8080` via Docker.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Installation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/yourusername/finguard-ui.git](https://github.com/yourusername/finguard-ui.git)
+   cd finguard-ui
+   ```

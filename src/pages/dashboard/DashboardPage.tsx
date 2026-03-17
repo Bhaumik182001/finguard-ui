@@ -5,7 +5,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import type { Account } from "@/types/account";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { LogOut, CreditCard, Building } from "lucide-react";
+import { LogOut, CreditCard, Building, History } from "lucide-react";
 
 const formatCurrency = (amount: number, currency: string) => {
   return new Intl.NumberFormat('en-US', {
@@ -55,9 +55,19 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-slate-900">Accounts Summary</h1>
-          <p className="text-slate-500 mt-1">View and manage your active accounts.</p>
+       <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-semibold text-slate-900">Accounts Summary</h1>
+            <p className="text-slate-500 mt-1">View and manage your active accounts.</p>
+          </div>
+          <Button 
+            variant="outline" 
+            className="border-slate-300 text-slate-700 hover:bg-slate-100 bg-white shadow-sm"
+            onClick={() => navigate('/history')}
+          >
+            <History className="mr-2 h-4 w-4" />
+            View History
+          </Button>
         </div>
 
         {isLoading ? (
