@@ -20,13 +20,14 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor: Handle Global Errors & 401s
+// Response Interceptor: Handle Global Errors, 401s & 403s
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     // THE BOUNCER: If the token is expired or invalid
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
       localStorage.removeItem('finguard_token');
+      localStorage.removeItem('token');
       // Only redirect if we aren't already on the login page
       if (window.location.pathname !== '/login') {
         window.location.href = '/login';

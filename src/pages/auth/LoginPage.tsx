@@ -53,9 +53,9 @@ export default function LoginPage() {
 
         toast.success("Login successful");
         navigate("/dashboard");
-    } catch (error) {  
-      // apiClient already handles the toast.error, we just catch to prevent crashes
+    } catch (error: any) {  
       console.error("Login attempt failed", error);
+      toast.error(error.response?.data?.message || "Invalid email or password.");
     } finally {
       setIsLoading(false);
     }
