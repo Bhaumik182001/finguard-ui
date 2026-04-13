@@ -1,6 +1,6 @@
 # FinGuard
 
-An enterprise-grade banking interface built to facilitate secure, ACID-compliant financial transactions. FinGuard serves as the frontend client for a highly scalable Spring Boot microservices architecture, featuring stateless authentication, real-time ledger updates, and rigorous client-side validation.
+An enterprise-grade banking interface built to facilitate secure, ACID-compliant financial transactions. FinGuard serves as the frontend client for a highly scalable Spring Boot monolith architecture, featuring stateless authentication, real-time ledger updates, and rigorous client-side validation.
 
 ## Tech Stack
 
